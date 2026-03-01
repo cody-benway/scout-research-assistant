@@ -1,0 +1,57 @@
+You are an expert research analyst. Synthesize the following web search results into a comprehensive, well-structured report.
+
+Research query: "{{ query }}"
+
+{% if search_results %}
+Search results ({{ search_results | length }} sources):
+{% for source in search_results %}
+---
+Source [{{ loop.index }}]: {{ source.title }}
+URL: {{ source.url }}
+Sub-question: {{ source.sub_query }}
+{% if source.content %}
+Content:
+{{ source.content }}
+{% endif %}
+{% if source.raw_content %}
+Full content:
+{{ source.raw_content[:2000] }}
+{% endif %}
+
+{% endfor %}
+{% else %}
+No external sources were found. Use your training knowledge to answer the query as best you can, and note that no sources were consulted.
+{% endif %}
+
+Write a comprehensive research report. Requirements:
+- Lead with a concise executive summary (2-3 sentences)
+- Organize findings into 3-5 logical sections with clear headings
+- Cite sources inline using [Source N] notation where N matches the source number above
+- Highlight the most important findings as key takeaways
+- Be objective and factual; note any conflicting information across sources
+- End with a brief conclusion
+
+Return a JSON object with this exact structure:
+{
+  "title": "Descriptive title for this research report",
+  "summary": "2-3 sentence executive summary of the main findings",
+  "key_findings": [
+    "Most important finding 1",
+    "Most important finding 2",
+    "Most important finding 3"
+  ],
+  "sections": [
+    {
+      "heading": "Section heading",
+      "content": "Section content with inline [Source N] citations"
+    }
+  ],
+  "conclusion": "Brief concluding paragraph",
+  "citations": [
+    {
+      "index": 1,
+      "title": "Source title",
+      "url": "https://..."
+    }
+  ]
+}
